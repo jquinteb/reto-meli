@@ -11,7 +11,7 @@ const TableProyecto = ({table}) => {
   const [data, setData] = useState([]);
   const [newRecord, setNewRecord] = useState({});
   const [editedRecord, setEditedRecord] = useState(data);
-
+  const [error, setError] = useState('');
 
 
   useEffect(() => {
@@ -26,13 +26,13 @@ const TableProyecto = ({table}) => {
         setData(values);        
 
       } catch (error) {
-        console.error('Error fetching table data:', error);
+        console.error('Error consultando los datos de la API:', error);
       }
     };
 
-    if (table) {
-      getData();
-    }
+    table && getData();
+
+
   }, [table]);
 
   const handleSaveClick = () => {    
@@ -44,7 +44,7 @@ const TableProyecto = ({table}) => {
       );
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Error saving record:', error);
+      console.error('Error guardando registro:', error);
     }
   };
 
@@ -52,12 +52,19 @@ const TableProyecto = ({table}) => {
 
   const handleCreate = async () => {
 
+    const isFormValid = header.every((item) => newRecord[item.name] && newRecord[item.name].trim() !== '');
+
+    if (!isFormValid) {
+      setError('Por favor, completa todos los campos antes de grabar.');
+      return; 
+    }
+
     try {
       setData((prevData) => [...prevData, newRecord]);      
       setNewRecord({});
 
     } catch (error) {
-      console.error('Error creating record:', error);
+      console.error('Error creando el registro:', error);
     }
   };
 
@@ -65,13 +72,12 @@ const TableProyecto = ({table}) => {
 
   const handleUpdate = async (item) => {
     try {
-      console.log(item);
-
+      
         setIsModalOpen(true);
         setEditedRecord(item);
         
     } catch (error) {
-      console.error('Error updating record:', error);
+      console.error('Error actualizando el registro:', error);
     }
   };
 
@@ -81,7 +87,7 @@ const TableProyecto = ({table}) => {
     try {
         setData((prevData) => prevData.filter((item) =>  item.id !==id));
     } catch (error) {
-      console.error('Error deleting record:', error);
+      console.error('Error eliminando el registro:', error);
     }
   };
 
@@ -102,6 +108,8 @@ const TableProyecto = ({table}) => {
           ))}
 
           <br /> <br />
+
+          {error && <p style={{ color: 'red' }}>{error}</p>}
 
           <button onClick={handleCreate}>Grabar</button>
         </div>

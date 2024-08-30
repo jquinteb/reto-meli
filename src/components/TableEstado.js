@@ -11,7 +11,7 @@ const TableEstado = ({table}) => {
   const [data, setData] = useState([]);
   const [newRecord, setNewRecord] = useState({});
   const [editedRecord, setEditedRecord] = useState(data);
-
+  const [error, setError] = useState('');
 
 
   useEffect(() => {
@@ -25,14 +25,15 @@ const TableEstado = ({table}) => {
         setData(values);        
 
       } catch (error) {
-        console.error('Error fetching table data:', error);
+        console.error('Error consultando los datos de la API:', error);
       }
     };
 
-    if (table) {
-      getData();
-    }
+    table && getData();
+    
   }, [table]);
+
+
 
   const handleSaveClick = () => {    
     try {      
@@ -43,19 +44,27 @@ const TableEstado = ({table}) => {
       );
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Error saving record:', error);
+      console.error('Error guardando registro:', error);
     }
   };
 
 
 
   const handleCreate = async () => {
+
+    const isFormValid = header.every((item) => newRecord[item.name] && newRecord[item.name].trim() !== '');
+
+    if (!isFormValid) {
+      setError('Por favor, completa todos los campos antes de grabar.');
+      return; 
+    }
+
     try {
       setData((prevData) => [...prevData, newRecord]);      
       setNewRecord({});
-
+      setError('');
     } catch (error) {
-      console.error('Error creating record:', error);
+      console.error('Error creando el registro:', error);
     }
   };
 
@@ -63,13 +72,12 @@ const TableEstado = ({table}) => {
 
   const handleUpdate = async (item) => {
     try {
-      console.log(item);
-
+      
         setIsModalOpen(true);
         setEditedRecord(item);
         
     } catch (error) {
-      console.error('Error updating record:', error);
+      console.error('Error actualizando el registro:', error);
     }
   };
 
@@ -79,7 +87,7 @@ const TableEstado = ({table}) => {
     try {
         setData((prevData) => prevData.filter((item) =>  item.codigo !==codigo));
     } catch (error) {
-      console.error('Error deleting record:', error);
+      console.error('Error eliminando el registro:', error);
     }
   };
 
@@ -93,13 +101,15 @@ const TableEstado = ({table}) => {
           {header.map((item) => (
             <input
               key={item.name}
-              type="text"
-              placeholder={item.name}
+              type="text"              
+              placeholder={item.name}              
               onChange={(e) => setNewRecord({ ...newRecord, [item.name]: e.target.value })}
             />
           ))}
 
           <br /> <br />
+
+          {error && <p style={{ color: 'red' }}>{error}</p>}
 
           <button onClick={handleCreate}>Grabar</button>
         </div>
@@ -138,6 +148,7 @@ const TableEstado = ({table}) => {
           <label>Descripción:</label>
           <input
             type="text"
+            required
             value={editedRecord.descripcion}
             onChange={(e) => setEditedRecord({ ...editedRecord, descripcion: e.target.value })}
           />

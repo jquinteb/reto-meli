@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL, BASE_URL_PROYECTO } from '../helpers/config';
+import { BASE_URL } from '../helpers/config';
 
 
 export const apiClient = axios.create({
@@ -7,17 +7,10 @@ export const apiClient = axios.create({
   timeout: 10000,
 });
 
-// export const apiClientProyecto = axios.create({
-//   baseURL: BASE_URL_PROYECTO,
-//   timeout: 10000,
-// });
-
 
 export const fetchTables = (table) => apiClient.get(`/entity/${table}`);
 
 export const fetchTableData = (table) => apiClient.get(`/values/${table}`);
-
-// export const fetchTableProyecto = (table) => apiClientProyecto.get(`/values/${table}`);
 
 export const createRecord = (table, data) => apiClient.post(`/tables/${table}`, data);
 
