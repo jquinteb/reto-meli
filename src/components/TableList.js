@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { fetchTables } from '../api/apiClient';
 import '../styles.css';
 
 const TableList = ({ onTableSelect }) => {
