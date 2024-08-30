@@ -3,31 +3,26 @@ import TableList from './components/TableList';
 import TableCrud from './components/TableCrud';
 import './styles.css'; 
 
+import {Amplify} from 'aws-amplify';
+ import awsconfig from './aws-exports';
 
 import {Authenticator} from '@aws-amplify/ui-react'
 import '@aws-amplify/ui-react/styles.css'
 
+Amplify.configure(awsconfig);
 
 const App = () => {
   const [selectedTable, setSelectedTable] = useState(null);
 
   return (
-    <Authenticator>    
-        <div>          
-          <h1>CRUD Application</h1>
-          <div className="container">
-            <TableList onTableSelect={setSelectedTable} />
-            {selectedTable && <TableCrud table={selectedTable} />}
-
-            {({ signOut, user }) => (
-              <main>
-                <h1>Hello, {user.username}</h1>
-                <button onClick={signOut}>Sign out</button>
-              </main>
-            )}
-
-          </div>
-        </div>        
+    <Authenticator>
+      {({ signOut, user }) => (        
+        <>
+        <button onClick={signOut} className="centered-button">Sign out</button>
+        <TableList onTableSelect={setSelectedTable} />
+            {selectedTable && <TableCrud table={selectedTable} />}                    
+        </>        
+        )}
         </Authenticator>
     );
 
