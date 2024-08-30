@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-retomeli-dev-9471a-authRole",
+      "UnauthRoleArn": "arn:aws:iam::774305589023:role/amplify-retomeli-dev-9471a-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::774305589023:role/amplify-retomeli-dev-9471a-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-retomeli-dev-9471a-deployment",
+      "UnauthRoleName": "amplify-retomeli-dev-9471a-unauthRole",
+      "StackName": "amplify-retomeli-dev-9471a",
+      "StackId": "arn:aws:cloudformation:us-east-1:774305589023:stack/amplify-retomeli-dev-9471a/567dfe50-6671-11ef-8619-12e561930bc7",
+      "AmplifyAppId": "d2kjewhsqar1jj"
+    },
+    "categories": {
+      "auth": {
+        "retomeliebb0b9d3": {}
+      }
+    }
+  }
+}
