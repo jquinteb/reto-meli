@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { fetchTableData, createRecord, updateRecord, deleteRecord, fetchTables } from '../api/apiClient';
+import { fetchTableData, createRecord, updateRecord, deleteRecord, fetchTables, fetchTableProyecto } from '../api/apiClient';
 import '../styles.css';
+import TableItems from './TableItems';
 
 
 const TableCrud = ({ table }) => {
@@ -17,10 +18,19 @@ const TableCrud = ({ table }) => {
         const {fields} = (await fetchTables(table)).data;
 
         setheader(fields);
-            
-            const { values } = (await fetchTableData(table)).data;
 
-            setData(values);
+        if (table ==='proyecto'){
+
+          const { values } = (await fetchTableProyecto(table)).data;
+
+          setData(values);
+
+        }else{
+          const { values } = (await fetchTableData(table)).data;
+
+          setData(values);          
+          
+        }
         
       } catch (error) {
         console.error('Error fetching table data:', error);
@@ -94,17 +104,13 @@ const TableCrud = ({ table }) => {
                     ))}
                     <th>Acciones</th>
                     </tr>
-                </thead>                
-                <tbody>
+                </thead>                                
                     { data.map((item) => (
-                        <tr key={item.codigo}>
-                        <td>{item.codigo}</td>
-                        <td>{item.descripcion}</td>
-                        <td><button className="update" onClick={() => handleUpdate(item.id)}> Actualizar </button>
-                        <button className="delete" onClick={() => handleDelete(item.id)}> Eliminar </button></td>
-                        </tr>
-                    ))}
-                </tbody>
+                        <TableItems 
+                        table={table}
+                        {...item}
+                        />
+                    ))}                
             </table>
         </div>
     </>
